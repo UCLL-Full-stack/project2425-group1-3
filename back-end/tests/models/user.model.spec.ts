@@ -1,6 +1,6 @@
 
 import { describe, it, expect } from '@jest/globals';
-import { User } from '../model/user'; // Adjust path if needed
+import { User } from '../../model/user'; // Adjust path if needed
 
 describe('User Model', () => {
   it('should create a User with correct properties', () => {
@@ -28,7 +28,7 @@ describe('User Model', () => {
       name: '',
       email: '',
       password: '',
-      role: '',
+      role: 'user' as Role,
       phone_number: '',
       birth_date: new Date('')
     };

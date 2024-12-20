@@ -1,6 +1,8 @@
 
 import { describe, it, expect } from '@jest/globals';
-import { Review } from '../model/review';
+import { Review } from "../../model/review";
+import { User } from '../../model/user';
+import { Product } from '../../model/product';
 
 describe('Review Model', () => {
   it('should create a Review with correct properties', () => {
@@ -9,8 +11,8 @@ describe('Review Model', () => {
       rating: 5,
       text: 'Great product!',
       createdAt: new Date(),
-      userId: 1,
-      productId: 1
+      user: { id: 1, name: 'Test User', email: 'test@example.com' } as User,
+      product: { id: 1, name: 'Test Product', description: 'A test product' } as Product
     };
 
     const review = new Review(reviewData);
@@ -19,15 +21,17 @@ describe('Review Model', () => {
     expect(review.rating).toBe(reviewData.rating);
     expect(review.text).toBe(reviewData.text);
     expect(review.createdAt).toBe(reviewData.createdAt);
-    expect(review.userId).toBe(reviewData.userId);
-    expect(review.productId).toBe(reviewData.productId);
+    expect(review.user).toBe(reviewData.user);
+    expect(review.product).toBe(reviewData.product);
   });
 
   it('should fail when required properties are missing', () => {
     const invalidReviewData = {
       rating: 5,
       text: 'Great product!',
-      createdAt: new Date()
+      createdAt: new Date(),
+      user: { id: 1, name: 'Test User', email: 'test@example.com' } as User,
+      product: { id: 1, name: 'Test Product', description: 'A test product' } as Product
     };
 
     expect(() => new Review(invalidReviewData)).toThrow();

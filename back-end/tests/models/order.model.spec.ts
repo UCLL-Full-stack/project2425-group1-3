@@ -1,7 +1,9 @@
 
 import { describe, it, expect } from '@jest/globals';
-import { Order } from '../model/order';
-import { Product } from '../model/product';
+import { Order } from '../../model/order';
+import { Product } from '../../model/product';
+import { User } from '../../model/user';
+import { Role } from '../../types';
 
 describe('Order Model', () => {
   it('should create an Order with correct properties', () => {
@@ -25,7 +27,41 @@ describe('Order Model', () => {
       id: 1,
       totalPrice: 300,
       orderDate: new Date(),
-      userId: 1,
+      user: {
+          id: 1, name: 'User 1',
+          email: '',
+          password: '',
+          role: 'user',
+          phone_number: '',
+          birth_date: new Date(),
+          getId: function (): number | undefined {
+              throw new Error('Function not implemented.');
+          },
+          getName: function (): string {
+              throw new Error('Function not implemented.');
+          },
+          getBirthDate: function (): Date {
+              throw new Error('Function not implemented.');
+          },
+          getPassword: function (): string {
+              throw new Error('Function not implemented.');
+          },
+          getPhoneNumber: function (): string {
+              throw new Error('Function not implemented.');
+          },
+          getEmail: function (): string {
+              throw new Error('Function not implemented.');
+          },
+          getRole: function (): Role {
+              throw new Error('Function not implemented.');
+          },
+          validate: function (user: { name: string; birth_date: Date; password: string; phone_number: string; email: string; role: Role; }): void {
+              throw new Error('Function not implemented.');
+          },
+          equals: function (user: User): boolean {
+              throw new Error('Function not implemented.');
+          }
+      },
       products: [product1, product2],
     });
 
@@ -55,11 +91,46 @@ describe('Order Model', () => {
       id: 1,
       totalPrice: 0,
       orderDate: new Date(),
-      userId: 1,
+      user: {
+        id: 1,
+        name: 'User 1',
+        email: '',
+        password: '',
+        role: 'user',
+        phone_number: '',
+        birth_date: new Date(),
+        getId: function (): number | undefined {
+            throw new Error('Function not implemented.');
+        },
+        getName: function (): string {
+            throw new Error('Function not implemented.');
+        },
+        getBirthDate: function (): Date {
+            throw new Error('Function not implemented.');
+        },
+        getPassword: function (): string {
+            throw new Error('Function not implemented.');
+        },
+        getPhoneNumber: function (): string {
+            throw new Error('Function not implemented.');
+        },
+        getEmail: function (): string {
+            throw new Error('Function not implemented.');
+        },
+        getRole: function (): Role {
+            throw new Error('Function not implemented.');
+        },
+        validate: function (user: { name: string; birth_date: Date; password: string; phone_number: string; email: string; role: Role; }): void {
+            throw new Error('Function not implemented.');
+        },
+        equals: function (user: User): boolean {
+            throw new Error('Function not implemented.');
+        }
+      },
       products: [product1, product2],
     });
 
-    order.calculateTotalPrice();
+    order.getTotalPrice();
 
     expect(order.getTotalPrice()).toBe(300);
   });
