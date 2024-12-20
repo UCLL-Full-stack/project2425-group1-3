@@ -13,15 +13,6 @@ async function main() {
       role: 'admin',
       phone_number: '1234567890',
       birth_date: new Date('1990-01-01'),
-      Address: {
-        create: {
-          city: 'New York',
-          country: 'USA',
-          postCode: '10001',
-          street: '5th Avenue',
-          houseNumber: 1,
-        },
-      },
     },
   });
 
@@ -33,15 +24,29 @@ async function main() {
       role: 'user',
       phone_number: '0987654321',
       birth_date: new Date('1985-05-15'),
-      Address: {
-        create: {
-          city: 'Los Angeles',
-          country: 'USA',
-          postCode: '90001',
-          street: 'Sunset Boulevard',
-          houseNumber: 100,
-        },
-      },
+    },
+  });
+
+  // Create addresses
+  await prisma.address.create({
+    data: {
+      city: 'New York',
+      country: 'USA',
+      postCode: '10001',
+      street: '5th Avenue',
+      houseNumber: 1,
+      userId: user1.id,
+    },
+  });
+
+  await prisma.address.create({
+    data: {
+      city: 'Los Angeles',
+      country: 'USA',
+      postCode: '90001',
+      street: 'Sunset Boulevard',
+      houseNumber: 100,
+      userId: user2.id,
     },
   });
 
@@ -76,39 +81,66 @@ async function main() {
   // Create carts
   const cart1 = await prisma.cart.create({
     data: {
+      totalPrice: 0, // Will update after linking products
       userId: user1.id,
-      products: {
-        connect: [{ id: product1.id }, { id: product2.id }],
-      },
-      totalPrice: 300,
     },
   });
 
   const cart2 = await prisma.cart.create({
     data: {
+      totalPrice: 0,
       userId: user2.id,
-      products: {
-        connect: [{ id: product3.id }],
-      },
-      totalPrice: 150,
     },
+  });
+
+  // Link products to carts via CartProducts
+  await prisma.cartProducts.createMany({
+    data: [
+      { cartId: cart1.id, productId: product1.id },
+      { cartId: cart1.id, productId: product2.id },
+    ],
+  });
+
+  await prisma.cartProducts.createMany({
+    data: [{ cartId: cart2.id, productId: product3.id }],
+  });
+
+  // Update cart total prices
+  await prisma.cart.update({
+    where: { id: cart1.id },
+    data: { totalPrice: 300 },
+  });
+
+  await prisma.cart.update({
+    where: { id: cart2.id },
+    data: { totalPrice: 150 },
   });
 
   // Create orders
-  await prisma.order.create({
+  const order1 = await prisma.order.create({
     data: {
-      cartId: cart1.id,
-      totalPrice: cart1.totalPrice,
-      orderDate: new Date(),
+      totalPrice: 300,
+      userId: user1.id,
     },
   });
 
-  await prisma.order.create({
+  const order2 = await prisma.order.create({
     data: {
-      cartId: cart2.id,
-      totalPrice: cart2.totalPrice,
-      orderDate: new Date(),
+      totalPrice: 150,
+      userId: user2.id,
     },
+  });
+
+  // Link products to orders via OrderProduct
+  await prisma.orderProduct.createMany({
+    data: [
+      { orderId: order1.id, productId: product1.id },
+      { orderId: order1.id, productId: product2.id },
+    ],
+  });
+
+  await prisma.orderProduct.createMany({
+    data: [{ orderId: order2.id, productId: product3.id }],
   });
 
   // Create reviews
