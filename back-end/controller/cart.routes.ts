@@ -74,20 +74,12 @@ cartRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
 
 /**
  * @swagger
- * /carts/{id}:
+ * /carts:
  *   put:
- *     summary: Add a product to a specific cart.
+ *     summary: Add a product to the authenticated user's cart.
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: integer
- *         required: true
- *         description: The cart ID.
  *     requestBody:
- *       description: Product ID to add to the cart.
  *       required: true
  *       content:
  *         application/json:
@@ -98,13 +90,9 @@ cartRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
  *                 type: integer
  *     responses:
  *       200:
- *         description: Cart updated with the new product.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Cart'
- *       404:
- *         description: Cart or Product not found.
+ *         description: Updated cart with the new product.
+ *       400:
+ *         description: Error updating cart.
  */
 // PUT /carts/
 cartRouter.put('/', isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
@@ -163,16 +151,12 @@ cartRouter.get('/me', isAuthenticated, async (req: Request, res: Response, next:
  *         schema:
  *           type: integer
  *         required: true
- *         description: The product ID.
+ *         description: The product ID to remove from the cart.
  *     responses:
  *       200:
- *         description: Product removed from the cart.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Cart'
- *       404:
- *         description: Cart or Product not found.
+ *         description: Product successfully removed from the cart.
+ *       400:
+ *         description: Error removing product from cart.
  */
 cartRouter.delete('/me/products/:productId', isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
     const { productId } = req.params;

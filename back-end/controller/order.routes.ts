@@ -4,7 +4,19 @@ import { isAuthenticated } from '../util/jwt';
 
 const orderRouter = express.Router();
 
-// POST /orders
+/**
+ * @swagger
+ * /orders:
+ *   post:
+ *     summary: Create an order for the authenticated user.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       201:
+ *         description: Order created successfully.
+ *       400:
+ *         description: Error creating order.
+ */
 orderRouter.post('/', isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
     const request = req as Request & { auth: { email: string } };
     const { email } = request.auth;
@@ -17,7 +29,19 @@ orderRouter.post('/', isAuthenticated, async (req: Request, res: Response, next:
     }
 });
 
-// GET /orders
+/**
+ * @swagger
+ * /orders:
+ *   get:
+ *     summary: Retrieve all orders for the authenticated user.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: A list of user orders.
+ *       400:
+ *         description: Error retrieving orders.
+ */
 orderRouter.get('/', isAuthenticated, async (req: Request, res: Response, next: NextFunction) => {
     const request = req as Request & { auth: { email: string } };
     const { email } = request.auth;

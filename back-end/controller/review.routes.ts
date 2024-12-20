@@ -1,10 +1,40 @@
-
 import express, { NextFunction, Request, Response } from 'express';
 import reviewService from '../service/review.service';
 import { Role, productInput, reviewInput } from '../types';
 
-
-
+/**
+ * @swagger
+ * /reviews/{id}:
+ *   post:
+ *     summary: Create a review for a given product ID.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: Product ID.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               rating:
+ *                 type: integer
+ *               text:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Returns the newly created review.
+ *       400:
+ *         description: Error creating review.
+ *       404:
+ *         description: Product not found.
+ */
 
 const reviewRouter = express.Router();
 
